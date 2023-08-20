@@ -1,0 +1,39 @@
+version: '3'
+services:
+  redis-master:
+    image: redis:6
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-master:/data
+    command: redis-server --appendonly yes
+
+  redis-slave1:
+    image: redis:6
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redis-slave1:/data
+    command: redis-server --appendonly yes --slaveof redis-master 6379
+
+  redis-slave2:
+    image: redis:6
+    ports:
+      - "6381:6379"
+    volumes:
+      - ./redis-slave2:/data
+    command: redis-server --appendonly yes --slaveof redis-master 6379
+
+  redis-sentinel:
+    image: redis:6
+    ports:
+      - "26379:26379"
+    volumes:
+      - ./redis-sentinel:/data
+    command: redis-sentinel /data/sentinel.conf
+
+volumes:
+  redis-master:
+  redis-slave1:
+  redis-slave2:
+  redis-sentinel:
