@@ -29,8 +29,10 @@ services:
     ports:
       - "26379:26379"
     volumes:
-      - ./redis-sentinel:/data
+      - ./sentinel.conf:/data/sentinel.conf
     command: redis-sentinel /data/sentinel.conf
+    depends_on:
+      - redis-master
 
 volumes:
   redis-master:
