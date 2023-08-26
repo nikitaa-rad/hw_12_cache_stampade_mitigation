@@ -1,16 +1,14 @@
-class UserCacheService
+class CacheService
   TTL = 40 # in seconds
   BETA = 1
 
-  def self.fetch_all
-    key = "all_users_count"
-
+  def self.fetch(key, query)
     value, delta, expiry = cache_read(key)
 
     if value.nil? || (Time.now.to_i - delta * BETA * Math.log(rand)) >= expiry
       start_time = Time.now.to_i
 
-      value = User.where("age > :age", age: 99).count
+      value = query.call
 
       delta = Time.now.to_i - start_time
 
