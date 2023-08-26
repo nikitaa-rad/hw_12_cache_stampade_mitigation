@@ -1,41 +1,61 @@
-version: '3'
+version: '3.7'
+
 services:
   redis-master:
-    image: redis:6
+    image: redis:6-alpine
+    networks:
+      - redis-network
+    volumes:
+      - "./.data:/data"
     ports:
       - "6379:6379"
-    volumes:
-      - ./redis-master:/data
-    command: redis-server --appendonly yes
 
-  redis-slave1:
-    image: redis:6
-    ports:
-      - "6380:6379"
+  redis-slave:
+    image: redis:6-alpine
+    networks:
+      - redis-network
+    command: redis-server --slaveof redis-master 6379
+    links:
+      - redis-master
     volumes:
-      - ./redis-slave1:/data
-    command: redis-server --appendonly yes --slaveof redis-master 6379
+      - "./.data:/data"
 
-  redis-slave2:
-    image: redis:6
-    ports:
-      - "6381:6379"
-    volumes:
-      - ./redis-slave2:/data
-    command: redis-server --appendonly yes --slaveof redis-master 6379
-
+  # Instance 1
   redis-sentinel:
-    image: redis:6
-    ports:
-      - "26379:26379"
-    volumes:
-      - ./sentinel.conf:/data/sentinel.conf
-    command: redis-sentinel /data/sentinel.conf
+    build:
+      context: ./redis-sentinel
+    networks:
+      - redis-network
     depends_on:
       - redis-master
+      - redis-slave
+    links:
+      - redis-master
 
-volumes:
-  redis-master:
-  redis-slave1:
-  redis-slave2:
-  redis-sentinel:
+  # Instance 2
+  redis-sentinel2:
+    build:
+      context: ./redis-sentinel
+    networks:
+      - redis-network
+    depends_on:
+      - redis-master
+      - redis-slave
+    links:
+      - redis-master
+
+  # Instance 3
+  redis-sentinel3:
+    build:
+      context: ./redis-sentinel
+    networks:
+      - redis-network
+    depends_on:
+      - redis-master
+      - redis-slave
+    links:
+      - redis-master
+
+networks:
+  redis-network:
+    driver: bridge
