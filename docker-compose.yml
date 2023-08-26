@@ -1,6 +1,35 @@
 version: '3.7'
 
 services:
+  users_service:
+    build: ./users_service
+    networks:
+      - redis-network
+    depends_on:
+      - db
+      - redis-master
+      - redis-slave
+    environment:
+      DATABASE_URL: "mysql2://root:password@db/users_service_development"
+      REDIS_MASTER_URL: "redis://redis-master:6379/0"
+      REDIS_SLAVE_URL: "redis://redis-slave:6379/0"
+    volumes:
+      - ./users_service:/app
+    ports:
+      - "3000:3000"
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: users_service_development
+    ports:
+      - '3306:3306'
+    networks:
+      - redis-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+
   redis-master:
     image: redis:6-alpine
     networks:
@@ -59,3 +88,6 @@ services:
 networks:
   redis-network:
     driver: bridge
+
+volumes:
+  mysql-data:
