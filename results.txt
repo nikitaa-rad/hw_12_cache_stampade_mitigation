@@ -1,0 +1,43 @@
+siege http://localhost:3000/users/classic_caching?age=99 -c 25 -t 3m
+Transactions:                   9984 hits
+Availability:                 100.00 %
+Elapsed time:                 180.75 secs
+Data transferred:               0.08 MB
+Response time:                  0.45 secs
+Transaction rate:              55.24 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   24.97
+Successful transactions:        9984
+Failed transactions:               0
+Longest transaction:            9.57
+Shortest transaction:           0.28
+
+siege http://localhost:3000/users/cache_stampede_mitigation?age=99 -c 25 -t 3m
+Transactions:                   4940 hits
+Availability:                 100.00 %
+Elapsed time:                 180.62 secs
+Data transferred:               0.04 MB
+Response time:                  0.90 secs
+Transaction rate:              27.35 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   24.54
+Successful transactions:        4940
+Failed transactions:               0
+Longest transaction:           19.15
+Shortest transaction:           0.30
+
+siege http://localhost:3000/users/cache_stampede_mitigation_with_flag?age=99 -c 25 -t 3m
+Transactions:                   9743 hits
+Availability:                 100.00 %
+Elapsed time:                 180.95 secs
+Data transferred:               0.07 MB
+Response time:                  0.46 secs
+Transaction rate:              53.84 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   24.90
+Successful transactions:        9743
+Failed transactions:               0
+Longest transaction:           15.56
+Shortest transaction:           0.29
+
+
