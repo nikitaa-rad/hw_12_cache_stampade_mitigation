@@ -6,9 +6,7 @@ class CacheService
 
     if value.nil? || (Time.now.to_i - delta * BETA * Math.log(rand)) >= expiry
       start_time = Time.now.to_i
-
       value = query.call
-
       delta = Time.now.to_i - start_time
 
       cache_write(key, value, delta, ttl)
