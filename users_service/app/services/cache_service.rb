@@ -20,7 +20,7 @@ class CacheService
   private
 
   def self.cache_read(key)
-    cached_data = RedisConnection.master.get(key)
+    cached_data = RedisConnection.slave.get(key)
     return [nil, nil, nil] unless cached_data
 
     data = JSON.parse(cached_data)

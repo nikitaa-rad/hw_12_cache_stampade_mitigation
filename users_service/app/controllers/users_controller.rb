@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def classic_caching
     key = 'classic_caching'
 
-    cached_data = RedisConnection.master.get(key)
+    cached_data = RedisConnection.slave.get(key)
     if cached_data
       users_count = JSON.parse(cached_data)["value"]
     else
