@@ -2,14 +2,13 @@ class UsersController < ApplicationController
   TTL = 60
 
   def classic_caching
-    age_param = params[:age].to_i
-    key = User.where("age > :age", age: age_param).to_sql
+    key = 'classic_caching'
 
     cached_data = RedisConnection.master.get(key)
     if cached_data
       users_count = JSON.parse(cached_data)["value"]
     else
-      users_count = User.where("age > :age", age: age_param).count
+      users_count = MockDatabaseService.long_running_query("#{key}.txt")
 
       data = {
         value: users_count
@@ -21,21 +20,21 @@ class UsersController < ApplicationController
   end
 
   def cache_stampede_mitigation
-    age_param = params[:age].to_i
+    key = 'cache_stampede_mitigation'
 
-    query = -> { User.where("age > :age", age: age_param).count }
+    query = -> { MockDatabaseService.long_running_query("#{key}.txt") }
 
-    users_count = CacheService.fetch(User.where("age > :age", age: age_param).to_sql, query, TTL)
+    users_count = CacheService.fetch(key, query, TTL)
 
     render json: users_count
   end
 
   def cache_stampede_mitigation_with_flag
-    age_param = params[:age].to_i
+    key = 'cache_stampede_mitigation_with_flag'
 
-    query = -> { User.where("age > :age", age: age_param).count }
+    query = -> { MockDatabaseService.long_running_query("#{key}.txt") }
 
-    users_count = CacheWithFlagService.fetch(User.where("age > :age", age: age_param).to_sql, query, TTL)
+    users_count = CacheWithFlagService.fetch(key, query, TTL)
 
     render json: users_count
   end
