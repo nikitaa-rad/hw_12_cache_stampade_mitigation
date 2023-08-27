@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  TTL = 60
+  TTL = 30
 
   def classic_caching
     key = 'classic_caching'

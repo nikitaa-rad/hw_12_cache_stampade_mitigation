@@ -1,0 +1,41 @@
+classic_caching
+Transactions:                  11359 hits
+Availability:                 100.00 %
+Elapsed time:                 180.53 secs
+Data transferred:               0.10 MB
+Response time:                  0.40 secs
+Transaction rate:              62.92 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   24.97
+Successful transactions:       11359
+Failed transactions:               0
+Longest transaction:            3.74
+Shortest transaction:           0.24
+
+cache_stampede_mitigation
+Transactions:                  11514 hits
+Availability:                 100.00 %
+Elapsed time:                 180.12 secs
+Data transferred:               0.10 MB
+Response time:                  0.39 secs
+Transaction rate:              63.92 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   24.97
+Successful transactions:       11514
+Failed transactions:               0
+Longest transaction:            3.66
+Shortest transaction:           0.26
+
+cache_stampede_mitigation_with_flag
+Transactions:                  13162 hits
+Availability:                 100.00 %
+Elapsed time:                 180.79 secs
+Data transferred:               0.11 MB
+Response time:                  0.34 secs
+Transaction rate:              72.80 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   24.96
+Successful transactions:       13162
+Failed transactions:               0
+Longest transaction:            3.41
+Shortest transaction:           0.24
